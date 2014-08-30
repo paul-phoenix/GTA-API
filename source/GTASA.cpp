@@ -223,11 +223,11 @@ int GTASA::API_IsPlayerInRangeOfPoint(float radius, float x, float y, float z) {
 		float x1 = 0.0, y1 = 0.0, z1 = 0.0, posX = 0.0, posY = 0.0, posZ = 0.0;
 		API_GetPlayerPos(x1, y1, z1);
 
-		posX = x1 - x;
-		posY = y1 - y;
-		posZ = z1 - z;
+		posX = (x1 - x)*(x1 - x);
+		posY = (y1 - y)*(y1 - y);
+		posZ = (z1 - z)*(z1 - z);
 
-		if (((posX < radius) && (posX > -radius)) && ((posY < radius) && (posY > -radius)) && ((posZ < radius) && (posZ > -radius))) {
+		if ( radius*radius > (posX+posY+posZ) ) {
 			return 1;
 		}
 
@@ -677,7 +677,8 @@ int GTASA::API_GetVehicleType() {
 			}
 			// bike or bicycle?
 			else if (type == 4) {
-				if (API_GetVehicleModelID() == 481 || API_GetVehicleModelID() == 509 || API_GetVehicleModelID() == 510) {
+				int mid=API_GetVehicleModelID();
+				if (mid == 481 || mid == 509 || mid == 510) {
 					type = 6;
 				}
 			}
